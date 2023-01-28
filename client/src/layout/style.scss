@@ -1,0 +1,16 @@
+@import "../scss/style.scss";
+
+.main {
+  @include themify($themes) {
+    display: flex;
+    justify-content: space-between;
+    .main-container {
+      background-color: themed("bgSoft");
+      flex: 2.7;
+      padding: 20px;
+      @include mobile {
+        padding: 15px;
+      }
+    }
+  }
+}
