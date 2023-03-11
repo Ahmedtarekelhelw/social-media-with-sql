@@ -2,11 +2,29 @@ import "./login.scss";
 import { Form, Link, useActionData } from "react-router-dom";
 import { Auth } from "../../context/authContext";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Login = () => {
   const data = useActionData();
   const { setUser } = Auth();
+  const [page, setPage] = useState(1);
+
+  const [loadingMore, setLoadingMore] = useState(false);
+  // Watch Scrolling If reach to bottom
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollTop = window.pageYOffset;
+      // const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      if (scrollTop + clientHeight >= scrollHeight) {
+        setLoadingMore(true);
+        setPage(page + 1);
+      }
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [page]);
 
   useEffect(() => {
     if (data?.success) {
@@ -18,6 +36,8 @@ const Login = () => {
       <div className="card">
         <div className="left">
           <h1>Hello World.</h1>
+          <p className="error">{page}</p>
+
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero cum,
             alias totam numquam ipsa exercitationem dignissimos, error nam,
